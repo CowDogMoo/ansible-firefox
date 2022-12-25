@@ -43,15 +43,15 @@ jobs:
       - name: Install pre-commit dependencies
         run: mage installDeps
 
-      - name: Run pre-commit autoupdate action
-        uses: browniebroke/pre-commit-autoupdate-action@main
+      # - name: Run pre-commit autoupdate action
+      #   uses: browniebroke/pre-commit-autoupdate-action@main
 
-      - name: Create Pull Request with updates
-        uses: peter-evans/create-pull-request@v4.2.3
-        with:
-          token: ${{ secrets.BOT_TOKEN }}
-          base: main
-          branch: update/pre-commit-hooks
-          title: Update pre-commit hooks
-          commit-message: "chore: update pre-commit hooks"
-          body: Update versions of pre-commit hooks to latest version.
+      # - name: Create Pull Request with updates
+      #   uses: peter-evans/create-pull-request@v4.2.3
+      #   with:
+      #     token: ${{ secrets.BOT_TOKEN }}
+      #     base: main
+      #     branch: update/pre-commit-hooks
+      #     title: Update pre-commit hooks
+      #     commit-message: "chore: update pre-commit hooks"
+      #     body: Update versions of pre-commit hooks to latest version.
