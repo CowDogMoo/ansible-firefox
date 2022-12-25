@@ -1,0 +1,31 @@
+---
+- name: Ensure dependencies are installed.
+  ansible.builtin.apt:
+    name: "{{ install_packages }}"
+    state: present
+    update_cache: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Add {{ ansible_distribution_release }} PPA repository for Mozilla Firefox
+  ansible.builtin.apt_repository:
+    repo: ppa:mozillateam/ppa
+    codename: "{{ ansible_distribution_release }}"
+
+- name: Create apt preferences file for Mozilla Firefox
+  ansible.builtin.copy:
+    content: |
+      Package: *
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: 1001
+    dest: /etc/apt/preferences.d/mozilla-firefox
+
+- name: Create apt configuration file for unattended upgrades of Mozilla Firefox
+  ansible.builtin.copy:
+    content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_distribution_release }}";'
+    dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+- name: Install Mozilla Firefox
+  ansible.builtin.apt:
+    name: firefox
+    update_cache: yes

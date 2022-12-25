@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+
+  post_tasks:
+    - name: Confirm firefox is installed
+      ansible.builtin.stat:
+        path: "/usr/bin/firefox"
