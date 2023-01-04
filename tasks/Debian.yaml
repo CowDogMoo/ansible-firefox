@@ -14,7 +14,7 @@
     ansible_distribution_release: "focal"
   when: (ansible_distribution_release == "kali-rolling") or (ansible_distribution | lower == "debian")
 
-- name: Add {{ ansible_distribution_release }} PPA repository for Mozilla Firefox
+- name: Add Mozilla Firefox PPA repository {{ ansible_distribution_release }}
   become: true
   ansible.builtin.apt_repository:
     repo: ppa:mozillateam/ppa
@@ -28,12 +28,14 @@
       Pin: release o=LP-PPA-mozillateam
       Pin-Priority: 1001
     dest: /etc/apt/preferences.d/mozilla-firefox
+    mode: 0644
 
 - name: Create apt configuration file for unattended upgrades of Mozilla Firefox
   become: true
   ansible.builtin.copy:
     content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_distribution_release }}";'
     dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+    mode: 0644
 
 - name: Install Mozilla Firefox
   become: true
