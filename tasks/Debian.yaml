@@ -1,5 +1,6 @@
 ---
 - name: Ensure dependencies are installed.
+  become: true
   ansible.builtin.apt:
     name: "{{ install_packages }}"
     state: present
@@ -14,11 +15,13 @@
   when: (ansible_distribution_release == "kali-rolling") or (ansible_distribution | lower == "debian")
 
 - name: Add {{ ansible_distribution_release }} PPA repository for Mozilla Firefox
+  become: true
   ansible.builtin.apt_repository:
     repo: ppa:mozillateam/ppa
     codename: "{{ ansible_distribution_release }}"
 
 - name: Create apt preferences file for Mozilla Firefox
+  become: true
   ansible.builtin.copy:
     content: |
       Package: *
@@ -27,11 +30,13 @@
     dest: /etc/apt/preferences.d/mozilla-firefox
 
 - name: Create apt configuration file for unattended upgrades of Mozilla Firefox
+  become: true
   ansible.builtin.copy:
     content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_distribution_release }}";'
     dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
 
 - name: Install Mozilla Firefox
+  become: true
   ansible.builtin.apt:
     name: firefox
     update_cache: yes
