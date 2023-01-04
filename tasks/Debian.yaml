@@ -7,6 +7,12 @@
   environment:
     DEBIAN_FRONTEND: noninteractive
 
+- name: Set ansible_distribution for Kali and Debian
+  ansible.builtin.set_fact:
+    # https://fostips.com/install-latest-firefox-non-esr-debian/#rb-Method-3-Install-Firefox-from-Ubuntu-2004-Repository
+    ansible_distribution_release: "focal"
+  when: (ansible_distribution_release == "kali-rolling") or (ansible_distribution | lower == "debian")
+
 - name: Add {{ ansible_distribution_release }} PPA repository for Mozilla Firefox
   ansible.builtin.apt_repository:
     repo: ppa:mozillateam/ppa
